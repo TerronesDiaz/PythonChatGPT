@@ -12,12 +12,14 @@ class ChatView(tk.Tk):
         self.title("OpenAI Chatbot")
         self.geometry("500x400")
         self.text_area = scrolledtext.ScrolledText(self, state='disabled', wrap=tk.WORD)
-        self.text_area.grid(row=0, column=0, columnspan=3, sticky='nsew')
+        self.text_area.grid(row=0, column=0, columnspan=4, sticky='nsew')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
         self.entry_message = ttk.Entry(self)
         self.entry_message.grid(row=1, column=0, sticky='ew', padx=5, pady=5)
         self.entry_message.focus()
+        # Greet the user
+        self.display_message("I am a helpful assistant, how can I help you today?")
 
         # Bind the Enter key to the send message function
         self.entry_message.bind("<Return>", lambda e: self.on_send())
@@ -28,6 +30,10 @@ class ChatView(tk.Tk):
 
         self.quit_button = ttk.Button(self, text="Quit", command=self.confirm_quit)  # Cambiado para llamar a confirm_quit
         self.quit_button.grid(row=1, column=2, padx=5, pady=5)
+        
+        #Create the help button
+        self.help_button = ttk.Button(self, text="Help", command=self.help)
+        self.help_button.grid(row=1, column=3, padx=5, pady=5)
 
     def on_send(self):
         # Get the user input and handle it
@@ -46,3 +52,7 @@ class ChatView(tk.Tk):
         # Confirm if the user wants to quit
         if messagebox.askyesno("Confirm", "Are you sure you want to quit?"):
             self.quit()
+
+    def help(self):
+        # Display a help message
+        messagebox.showinfo("Help", "This is a chatbot created by OpenAI. You can chat with me by typing your message in the input box and pressing the Send button. If you want to quit, press the Quit button.")
