@@ -34,7 +34,7 @@ To install and use the OpenAI Chatbot, follow these steps:
 
 5. Start the chatbot:
    ```bash
-   python main.py
+   python chat_controller.py
    ```
 
 ## Usage
