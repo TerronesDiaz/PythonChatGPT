@@ -1,63 +1,51 @@
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox  # Importa messagebox
+from tkinter import ttk, scrolledtext, messagebox
 from better_profanity import profanity
-class ChatView(tk.Tk):
-    # This class is responsible for the GUI of the chatbot
 
+class ChatView(tk.Tk):
     def __init__(self, controller):
-        # Initialize the main window
         super().__init__()
         self.controller = controller
-        # Customizing the main window
+        self.setup_ui()
+        self.display_message("ChatBot: I am a helpful assistant created by OpenAI. How can I help you today?")
+
+    def setup_ui(self):
         self.title("OpenAI Chatbot")
         self.geometry("500x400")
+
         self.text_area = scrolledtext.ScrolledText(self, state='disabled', wrap=tk.WORD)
-        self.text_area.grid(row=0, column=0, columnspan=4, sticky='nsew')
+        self.text_area.grid(row=0, column=0, columnspan=3, sticky='nsew')
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
+
         self.entry_message = ttk.Entry(self)
-        self.entry_message.grid(row=1, column=0, sticky='ew', padx=5, pady=5)
+        self.entry_message.grid(row=1, column=0, sticky='ew')
         self.entry_message.focus()
-        # Greet the user
-        self.display_message("ChatBot: I am a helpful assistant, how can I help you today?")
 
-        # Bind the Enter key to the send message function
-        self.entry_message.bind("<Return>", lambda e: self.on_send())
+        send_button = ttk.Button(self, text="Send", command=self.on_send)
+        send_button.grid(row=1, column=1, sticky='ew')
 
-        # Create the send and quit buttons
-        self.send_button = ttk.Button(self, text="Send", command=self.on_send)
-        self.send_button.grid(row=1, column=1, padx=5, pady=5)
+        quit_button = ttk.Button(self, text="Quit", command=self.on_quit)
+        quit_button.grid(row=1, column=2, sticky='ew')
 
-        self.quit_button = ttk.Button(self, text="Quit", command=self.confirm_quit)  # Cambiado para llamar a confirm_quit
-        self.quit_button.grid(row=1, column=2, padx=5, pady=5)
-        
-        #Create the help button
-        self.help_button = ttk.Button(self, text="Help", command=self.help)
-        self.help_button.grid(row=1, column=3, padx=5, pady=5)
+        self.entry_message.bind("<Return>", lambda event: self.on_send())
 
     def on_send(self):
         user_input = self.entry_message.get()
-        if user_input:
-            # Censor the input if it contains any profanity
-            censored_input = profanity.censor(user_input)
-            if user_input != censored_input:  # Check if the message was censored
-                self.display_message("ChatBot: Please refrain from using inappropriate language.")
-                self.display_message("ChatBot: I am a helpful assistant, how can I help you today?")
-            else:
-                self.controller.handle_user_input(user_input)  # Only send the message if it was not censored
+        if user_input and not profanity.contains_profanity(user_input):
+            self.controller.handle_user_input(user_input)
+            self.entry_message.delete(0, tk.END)
+        elif profanity.contains_profanity(user_input):
+            messagebox.showwarning("Warning", "Please refrain from using inappropriate language.")
             self.entry_message.delete(0, tk.END)
 
     def display_message(self, message):
-        # Display a message in the text area
         self.text_area.configure(state='normal')
         self.text_area.insert(tk.END, message + "\n")
+        self.text_area.see(tk.END)
         self.text_area.configure(state='disabled')
 
-    def confirm_quit(self): 
-        # Confirm if the user wants to quit
-        if messagebox.askyesno("Confirm", "Are you sure you want to quit?"):
-            self.quit()
+    def on_quit(self):
+        if messagebox.askyesno("Confirm Quit", "Are you sure you want to quit?"):
+            self.destroy()
 
-    def help(self):
-        # Display a help message
-        messagebox.showinfo("Help", "This is a chatbot created by OpenAI. You can chat with me by typing your message in the input box and pressing the Send button. If you want to quit, press the Quit button.")
