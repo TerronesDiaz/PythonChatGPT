@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox  # Importa messagebox
-
+from better_profanity import profanity
 class ChatView(tk.Tk):
     # This class is responsible for the GUI of the chatbot
 
@@ -19,7 +19,7 @@ class ChatView(tk.Tk):
         self.entry_message.grid(row=1, column=0, sticky='ew', padx=5, pady=5)
         self.entry_message.focus()
         # Greet the user
-        self.display_message("I am a helpful assistant, how can I help you today?")
+        self.display_message("ChatBot: I am a helpful assistant, how can I help you today?")
 
         # Bind the Enter key to the send message function
         self.entry_message.bind("<Return>", lambda e: self.on_send())
@@ -36,10 +36,15 @@ class ChatView(tk.Tk):
         self.help_button.grid(row=1, column=3, padx=5, pady=5)
 
     def on_send(self):
-        # Get the user input and handle it
         user_input = self.entry_message.get()
         if user_input:
-            self.controller.handle_user_input(user_input)
+            # Censor the input if it contains any profanity
+            censored_input = profanity.censor(user_input)
+            if user_input != censored_input:  # Check if the message was censored
+                self.display_message("ChatBot: Please refrain from using inappropriate language.")
+                self.display_message("ChatBot: I am a helpful assistant, how can I help you today?")
+            else:
+                self.controller.handle_user_input(user_input)  # Only send the message if it was not censored
             self.entry_message.delete(0, tk.END)
 
     def display_message(self, message):
