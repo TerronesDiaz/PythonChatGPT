@@ -14,10 +14,9 @@ class ChatController:
         self.view.mainloop()
 
     def handle_user_input(self, user_input):
-        # Get the response from the model and display it in the view
         response = self.model.get_response(user_input)
-        self.view.display_message(f"You: {user_input}")
-        self.view.display_message(f"ChatBot: {response}")
+        self.view.display_message(user_input, "user")  
+        self.view.display_message(response, "bot") 
 
 if __name__ == "__main__":
     # Create an instance of the controller and run the chatbot
