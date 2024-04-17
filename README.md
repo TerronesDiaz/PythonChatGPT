@@ -21,11 +21,14 @@ To install and use the OpenAI Chatbot, follow these steps:
    python -m pip install --upgrade pip
 
 
-   The following dependencies are required:
-   - OpenAI (install with `pip install openai`)
-   - typer (install with `pip install typer`)
-   - rich (install with `pip install rich`)
-   - dotenv (install with `pip install python-dotenv`)
+The following dependencies are required:
+- better_profanity (install with `pip install better_profanity`)
+- Pillow (install with `pip install Pillow`)
+- OpenAI (install with `pip install openai`)
+- typer (install with `pip install typer`)
+- rich (install with `pip install rich`)
+- python-dotenv (optional, install with `pip install python-dotenv`)
+
 
 4. Set up your OpenAI API key in a `.env` file:
    ```bash
@@ -42,11 +45,11 @@ To install and use the OpenAI Chatbot, follow these steps:
 The OpenAI Chatbot provides a conversational interface where users can interact with the chatbot on various topics. The chatbot supports commands such as 
 `exit`, `new`, and `help` to manage the conversation.
 
-## Commands
+## Features:
 
-- `exit`: Exit the chatbot
-- `new`: Start a new conversation (clears the chat history)
-- `help`: Show help message
+- `Profile picture:`: You can customize the profile picture when you send a message.
+- `Reset Chat`: You can reset the conversation at any time with the reset chat button
+- `Save your conversation`: The bot will not forget the information you have provided unless you reset the conversation.
 
 ## Contributing
 
