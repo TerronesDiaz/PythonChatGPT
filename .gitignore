@@ -3,3 +3,4 @@ __pycache__
 *.png
 *.img
 config.json
+chat_history.json
