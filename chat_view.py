@@ -56,7 +56,7 @@ class ChatView(tk.Tk):
         self.geometry("800x600")  # Adjusted for typical screen size
 
         self.chat_frame = tk.Frame(self)
-        self.chat_frame.grid(row=0, column=0, columnspan=4, sticky='nsew')
+        self.chat_frame.grid(row=0, column=0, columnspan=5, sticky='nsew')
 
         self.text_area = scrolledtext.ScrolledText(self.chat_frame, state='disabled', wrap=tk.WORD)
         self.text_area.pack(expand=True, fill='both')
@@ -69,6 +69,10 @@ class ChatView(tk.Tk):
 
         send_button = ttk.Button(self, text="Send", command=self.on_send)
         send_button.grid(row=1, column=1, sticky='ew')
+
+        #reset button
+        reset_button = ttk.Button(self, text="Reset Chat", command=self.on_reset_chat)
+        reset_button.grid(row=1, column=4, sticky='ew')
 
         quit_button = ttk.Button(self, text="Quit", command=self.on_quit)
         quit_button.grid(row=1, column=2, sticky='ew')
@@ -86,6 +90,10 @@ class ChatView(tk.Tk):
         elif profanity.contains_profanity(user_input):
             messagebox.showwarning("Warning", "Please refrain from using inappropriate language.")
             self.entry_message.delete(0, tk.END)
+
+    def on_reset_chat(self):
+        if messagebox.askyesno("Confirm Reset", "Are you sure you want to reset the chat history?"):
+            self.controller.handle_reset_chat()
 
     def display_message(self, message, sender):
         self.text_area.configure(state='normal')
