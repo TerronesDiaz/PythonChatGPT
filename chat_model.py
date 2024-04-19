@@ -16,6 +16,8 @@ class ChatModel:
             
             # If the chat history file exists, load it
             if os.path.exists("chat_history.json"):
+                # Void the messages list to avoid duplicates
+                self.messages = []
                 with open("chat_history.json", "r") as f:
                     self.messages.extend(json.load(f))
         except Exception as e:
@@ -58,3 +60,6 @@ class ChatModel:
         except Exception as e:
             print(f"Error resetting chat history: {e}")
             return False
+    
+    def get_messages(self):
+        return self.messages

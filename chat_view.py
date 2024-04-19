@@ -15,7 +15,17 @@ class ChatView(tk.Tk):
         self.load_config()
         self.bot_image = ImageTk.PhotoImage(Image.open("bot.png").resize((50, 50)))
         self.setup_ui()
-        self.display_message("ChatBot: I am a helpful assistant created by OpenAI. How can I help you today?", "bot")
+        self.load_and_display_messages()
+    
+    def load_and_display_messages(self):
+        # This method will load and display historical messages from the model
+        messages = self.controller.model.get_messages()
+        for message in messages:
+            if message['role'] == 'user':
+                self.display_message(message['content'], "user")
+            elif message['role'] == 'assistant':
+                self.display_message(message['content'], "bot")
+        self.display_message("Ready to assist you. How can I help today?", "bot")
 
     def create_round_image(self, img, size=(50, 50)):
         img = img.resize(size, Image.LANCZOS)
