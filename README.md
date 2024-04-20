@@ -1,5 +1,5 @@
-This repository contains a Python-based chatbot powered by OpenAI's GPT-3 model. The chatbot can have interactive conversations with users on various     
-topics.
+This repository contains a Python-based chatbot powered by OpenAI. The chatbot can have interactive conversations with users on various     
+topics. You can choose the model you want from those currently available.
 
 ## Installation
 
