@@ -15,15 +15,25 @@ class ChatController:
 
     def handle_user_input(self, user_input):
         response = self.model.get_response(user_input)
-        self.view.display_message(user_input, "user")  
-        self.view.display_message(response, "bot") 
+        self.view.display_message(response, "bot")  
+
 
     def handle_reset_chat(self):
         self.model.reset_chat_history()
-        self.view.text_area.configure(state='normal')
-        self.view.text_area.delete(1.0, "end")
-        self.view.text_area.configure(state='disabled')
+        
+        # Clear the canvas instead of text_area
+        self.view.canvas.delete("text")  
+        self.view.canvas.delete("image")  
+
+        # Reset the last_message_bottom to its initial value
+        self.view.last_message_bottom = 5
+        
+        # Update the scrollregion after clearing the canvas
+        self.view.canvas.configure(scrollregion=self.view.canvas.bbox("all"))
+        
+        # Display a message indicating that the chat has been reset
         self.view.display_message("Chat history has been reset.", "bot")
+
 
 if __name__ == "__main__":
     # Create an instance of the controller and run the chatbot
