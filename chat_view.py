@@ -107,16 +107,27 @@ class ChatView(tk.Tk):
 
     def display_message(self, message, sender):
         self.text_area.configure(state='normal')
+        user_tag = "user_text"
+        bot_tag = "bot_text"
+        
+        # Define tag configurations
+        self.text_area.tag_configure(user_tag, lmargin1=10, lmargin2=80, rmargin=60, wrap='word', spacing1=0, spacing2=0, spacing3=0)
+        self.text_area.tag_configure(bot_tag, lmargin1=10, lmargin2=80, rmargin=60, wrap='word', spacing1=0, spacing2=0, spacing3=0)
+
+        
         self.text_area.insert(tk.END, "\n")
         if sender == "user":
             image_to_use = self.user_image
-            self.text_area.image_create(tk.END, image=image_to_use, padx=10, pady=10)
+            self.text_area.image_create(tk.END, image=image_to_use, padx=10, pady=0)
+            self.text_area.insert(tk.END, " " + message + "\n", user_tag)
         else:
             image_to_use = self.bot_image
-            self.text_area.image_create(tk.END, image=image_to_use, padx=10, pady=10)
-        self.text_area.insert(tk.END, " " + message + "\n")
+            self.text_area.image_create(tk.END, image=image_to_use, padx=10, pady=0)
+            self.text_area.insert(tk.END, " " + message + "\n", bot_tag)
+        
         self.text_area.see(tk.END)
         self.text_area.configure(state='disabled')
+
 
     def change_photo(self):
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg *.png *.jpeg")])
