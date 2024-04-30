@@ -202,12 +202,14 @@ class ChatView(tk.Tk):
     def display_message(self, message, sender):
         if sender == "user":
             image_to_use = self.user_image
+            image_tag = ("image", "user_image")  # Added 'user_image' tag for user images
         else:
             image_to_use = self.bot_image
+            image_tag = ("image", "bot_image")
 
         # Display image
         image_id = self.canvas.create_image(
-            5, self.last_message_bottom + 10, anchor='nw', image=image_to_use, tags=("image",))
+            5, self.last_message_bottom + 10, anchor='nw', image=image_to_use, tags=image_tag)
 
         # Calculate position for text to align it with the image
         image_bbox = self.canvas.bbox(image_id)
@@ -245,11 +247,17 @@ class ChatView(tk.Tk):
             self.update_all_user_images()
 
     def update_all_user_images(self):
-        """Update all displayed user images in the text area."""
+        """Update all displayed user images in the canvas."""
         self.user_image = self.user_image_raw
-        for index in self.text_area.tag_names():
-            if "user_image" in index:
-                self.text_area.tag_config(index, image=self.user_image)
+        # Find all image objects tagged as 'user_image' on the canvas
+        user_images = self.canvas.find_withtag("user_image")
+        for image_id in user_images:
+            # Get the coordinates of the existing image to reuse them
+            coords = self.canvas.coords(image_id)
+            if coords:  # Check if coordinates are not empty
+                # Update the image object with the new image
+                self.canvas.itemconfig(image_id, image=self.user_image)
+
 
     def on_quit(self):
         if messagebox.askyesno("Confirm Quit", "Are you sure you want to quit?"):
